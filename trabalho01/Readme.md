@@ -1,0 +1,1 @@
+Exec with the command = clear && cd view && rm -f *.class && cd .. && rm -f *.class && cd model && rm -f *.class && cd .. && javac Principal.java && java Principal && cd view && rm -f *.class && cd .. && rm -f *.class && cd model && rm -f *.class && cd ..
