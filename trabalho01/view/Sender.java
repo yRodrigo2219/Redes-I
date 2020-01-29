@@ -5,23 +5,26 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.text.*;
 import java.awt.event.KeyEvent;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import java.awt.event.ActionEvent;
 import model.AplicacaoTransmissora;
 
 public class Sender extends JPanel {
-  public JTextArea senderTxt = new JTextArea();
+  public static JTextArea senderLayerTxt = new JTextArea();
+  public static JTextArea senderPhysTxt = new JTextArea();
+  public static JTextArea senderTxt = new JTextArea();
 
   public Sender(){
     super();
     this.setPreferredSize( new Dimension( Constants.WIDTH/3 , Constants.HEIGHT ) );
     init();
-    this.setBackground( Color.RED );
+    this.setLayout( null );
 
   }
 
@@ -37,14 +40,14 @@ public class Sender extends JPanel {
     JLabel sender = new JLabel( new ImageIcon( img ) );
     sender.setBounds( 10 , 15 , Constants.BLOONS_WIDTH , Constants.BLOONS_HEIGHT );
 
-    this.senderTxt.setOpaque( false );
-    this.senderTxt.setBounds( 20 , 20 , 260 , 110 );
-    this.senderTxt.setFont( Constants.FONT );
-    this.senderTxt.setLineWrap( true );
+    senderTxt.setOpaque( false );
+    senderTxt.setBounds( 20 , 20 , 260 , 110 );
+    senderTxt.setFont( Constants.FONT );
+    senderTxt.setLineWrap( true );
 
     KeyStroke enterStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-    this.senderTxt.getInputMap( WHEN_FOCUSED ).put( enterStroke , enterStroke.toString() );
-    this.senderTxt.getActionMap().put( enterStroke.toString() , new AbstractAction() {
+    senderTxt.getInputMap( WHEN_FOCUSED ).put( enterStroke , enterStroke.toString() );
+    senderTxt.getActionMap().put( enterStroke.toString() , new AbstractAction() {
 
       @Override
       public void actionPerformed(ActionEvent arg0) {
@@ -52,7 +55,7 @@ public class Sender extends JPanel {
 
       }
     });
-    this.senderTxt.setDocument( new PlainDocument() {
+    senderTxt.setDocument( new PlainDocument() {
       @Override
       public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
         if (str == null || senderTxt.getText().length() >= Constants.CHAR_LIMIT) {
@@ -63,17 +66,31 @@ public class Sender extends JPanel {
       }
     });
 
-    sender.add( this.senderTxt );
+    sender.add( senderTxt );
 
-    this.add(sender);
+    this.add( sender );
 
   }
 
   private void initSenderAppLayer(){
+    JScrollPane scrll = new JScrollPane( Sender.senderLayerTxt );
+
+    scrll.setBounds( 20 , Constants.BLOONS_HEIGHT + 50 , Constants.BLOONS_WIDTH , 200 );
+    Sender.senderLayerTxt.setOpaque( true );
+    Sender.senderLayerTxt.setEditable( false );
+
+    this.add( scrll );
 
   }
 
   private void initSenderPhysicalLayer(){
+    JScrollPane scrll = new JScrollPane( Sender.senderPhysTxt );
+
+    scrll.setBounds( 20 , Constants.BLOONS_HEIGHT*2 + 100 , Constants.BLOONS_WIDTH , 150 );
+    Sender.senderPhysTxt.setOpaque( true );
+    Sender.senderPhysTxt.setEditable( false );
+
+    this.add( scrll );
 
   }
 

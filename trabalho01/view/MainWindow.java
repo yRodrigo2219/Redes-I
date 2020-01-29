@@ -27,4 +27,9 @@ public class MainWindow extends JFrame{
 
   }
 
+  public static void error( String msg ){
+    System.out.println( "Error: " + msg );
+
+  }
+
 }

@@ -5,18 +5,19 @@ import javax.swing.JTextArea;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-
-import java.awt.Color;
+import javax.swing.JScrollPane;
 import java.awt.Dimension;
 
 public class Receiver extends JPanel {
-  public JTextArea receiverTxt = new JTextArea();
+  public static JTextArea receiverTxt = new JTextArea();
+  public static JTextArea receiverLayerTxt = new JTextArea();
+  public static JTextArea receiverPhysTxt = new JTextArea();
 
   public Receiver(){
     super();
     this.setPreferredSize( new Dimension( Constants.WIDTH/3 , Constants.HEIGHT ) );
     init();
-    this.setBackground( Color.YELLOW );
+    this.setLayout( null );
 
   }
 
@@ -32,22 +33,36 @@ public class Receiver extends JPanel {
     JLabel receiver = new JLabel( new ImageIcon( img ) );
     receiver.setBounds( 10 , 15 , Constants.BLOONS_WIDTH , Constants.BLOONS_HEIGHT );
 
-    this.receiverTxt.setOpaque( false );
-    this.receiverTxt.setBounds( 20 , 20 , 260 , 110 );
-    this.receiverTxt.setFont( Constants.FONT );
-    this.receiverTxt.setLineWrap( true );
-    this.receiverTxt.setEditable(false);
+    Receiver.receiverTxt.setOpaque(false);
+    Receiver.receiverTxt.setBounds( 20 , 20 , 260 , 110 );
+    Receiver.receiverTxt.setFont( Constants.FONT );
+    Receiver.receiverTxt.setLineWrap( true );
+    Receiver.receiverTxt.setEditable(false);
 
-    receiver.add( this.receiverTxt );
+    receiver.add( Receiver.receiverTxt );
 
     this.add( receiver );
   }
 
   private void initReceiverAppLayer(){
+    JScrollPane scrll = new JScrollPane( Receiver.receiverLayerTxt );
+
+    scrll.setBounds( 20 , Constants.BLOONS_HEIGHT + 50 , Constants.BLOONS_WIDTH , 200 );
+    Receiver.receiverLayerTxt.setOpaque( true );
+    Receiver.receiverLayerTxt.setEditable( false );
+
+    this.add( scrll );
 
   }
 
   private void initReceiverPhysicalLayer(){
+    JScrollPane scrll = new JScrollPane( Receiver.receiverPhysTxt );
+
+    scrll.setBounds( 20 , Constants.BLOONS_HEIGHT*2 + 100 , Constants.BLOONS_WIDTH , 150 );
+    Receiver.receiverPhysTxt.setOpaque( true );
+    Receiver.receiverPhysTxt.setEditable( false );
+
+    this.add( scrll );
 
   }
 
