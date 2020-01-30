@@ -1,6 +1,8 @@
 package view;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame{
@@ -28,7 +30,15 @@ public class MainWindow extends JFrame{
   }
 
   public static void error( String msg ){
-    System.out.println( "Error: " + msg );
+    JOptionPane.showMessageDialog( null , "Error: " + msg , "Error" , JOptionPane.ERROR_MESSAGE );
+
+    // re-estabelece a entrada de outras mensagens
+    Sender.senderTxt.setEditable( true );
+    Sender.senderTxt.setFocusable( true );
+    Sender.senderTxt.requestFocusInWindow();
+
+    // re-estabelece a troca de codificacao
+    CommunicationLayer.jDrop.setEnabled( true );
 
   }
 

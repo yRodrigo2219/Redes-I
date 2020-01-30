@@ -8,7 +8,7 @@ import view.Sender;
 public class CamadaDeAplicacaoTransmissora {
   public static void camadaDeAplicacaoTransmissora( String message ){
     Sender.senderLayerTxt.setText( "" ); // limpa o text
-    byte [] temp = message.getBytes(); // armazena os bytes
+    char [] temp = message.toCharArray();
     int [] frames = new int[ temp.length ];
 
     new Thread( new Runnable(){

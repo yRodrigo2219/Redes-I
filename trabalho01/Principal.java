@@ -1,5 +1,3 @@
-import view.CommunicationLayer;
-import view.Constants;
 import view.MainWindow;
 
 public class Principal {

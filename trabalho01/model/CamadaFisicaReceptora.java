@@ -3,6 +3,7 @@ package model;
 import javax.swing.SwingUtilities;
 
 import view.CommunicationLayer;
+import view.Convert;
 import view.Receiver;
 
 public class CamadaFisicaReceptora {
@@ -39,9 +40,9 @@ public class CamadaFisicaReceptora {
     int[] frames = new int[ bruteBitFlux.length / 8 ]; // cada quadro contem 8 bits ( ascii )
 
     int pos = 0;
-    String bits = "";
+    int[] bits = new int[ 8 ];
     for( int i = 0 ; i < bruteBitFlux.length ; i++ ){
-      bits += bruteBitFlux[ i ];
+      bits[ i%8 ] = bruteBitFlux[ i ];
 
       try {
         appendNow( bruteBitFlux[ i ] + "" );
@@ -50,7 +51,7 @@ public class CamadaFisicaReceptora {
       } catch (Exception e) { }
 
       if( i % 8 == 7 ){ // a cada 8 iteracoes
-        frames[ pos ] = Integer.parseInt( bits , 2); // converte para inteiro e armazena
+        frames[ pos ] = Convert.binaryToUtf8( bits ); // converte para inteiro e armazena
         try {
           appendNow( " -> " + frames[ pos ] + "\n" );
           Thread.sleep( wait );
@@ -58,7 +59,6 @@ public class CamadaFisicaReceptora {
         } catch (Exception e) { }
         // se prepara para o proximo
         pos++;
-        bits = "";
 
       }
 
@@ -73,28 +73,27 @@ public class CamadaFisicaReceptora {
                                                           // manchester, se utilizam 2 bits para representar um unico bit
 
     int pos = 0;
-    String bits = "";
-    String manc = "";
+    int[] bits = new int[ 8 ];
+    int[] manc = new int[ 16 ];
     for( int i = 0 ; i < bruteBitFlux.length ; i++ ){
-      manc += bruteBitFlux[ i ];
+      manc[ i%2 ] = bruteBitFlux[ i ];
 
       if( i % 2 == 1 ){ // a cada 2 iteracoes
-        if( manc.equals( "01" ) ) // se estiver subindo
-          bits += "1"; // o bit representado eh 1
+        if( manc[ 0 ] == 0 && manc[ 1 ] == 1 ) // se estiver subindo
+          bits[ (i/2)%8 ] = 1; // o bit representado eh 1
         else // se estiver descendo
-          bits += "0"; // o bit representado eh 0
+          bits[ (i/2)%8 ] = 0; // o bit representado eh 0
 
         try {
-          appendNow( manc );
+          appendNow( manc[ 0 ] + "" + manc[ 1 ] );
           Thread.sleep( wait );
           wait = 100 / CommunicationLayer.jSlider.getValue();
         } catch (Exception e) { }
-        manc = ""; // reinicia a espera pela cod.
 
       }
 
       if( i % 16 == 15 ){ // a cada 16 iteracoes
-        frames[ pos ] = Integer.parseInt( bits , 2); // converte para inteiro e armazena
+        frames[ pos ] = Convert.binaryToUtf8( bits ); // converte para inteiro e armazena
         try {
           appendNow( " -> " + frames[ pos ] + "\n" );
           Thread.sleep( wait );
@@ -102,7 +101,6 @@ public class CamadaFisicaReceptora {
         } catch (Exception e) { }
         // se prepara para o proximo
         pos++;
-        bits = "";
 
       }
 
@@ -117,39 +115,37 @@ public class CamadaFisicaReceptora {
                                                           // manchester, se utilizam 2 bits para representar um unico bit
 
     int pos = 0;
-    String bits = "";
-    String manc = "";
+    int[] bits = new int[ 8 ];
+    int[] manc = new int[ 16 ];
     for( int i = 0 ; i < bruteBitFlux.length ; i++ ){
-      manc += bruteBitFlux[ i ];
+      manc[ i%2 ] = bruteBitFlux[ i ];
 
       if( i % 2 == 1 ){ // a cada 2 iteracoes
         if( i == 1 ){ // se for o primeiro bit da transmissao, segue cod. manchester
-          if( manc.equals( "01" ) ) // se estiver subindo
-            bits += "1"; // o bit representado eh 1
+          if( manc[ 0 ] == 0 && manc[ 1 ] == 1 ) // se estiver subindo
+            bits[ (i/2)%8 ] = 1; // o bit representado eh 1
           else // se estiver descendo
-            bits += "0"; // o bit representado eh 0
+            bits[ (i/2)%8 ] = 0; // o bit representado eh 0
 
         }else{ // se nao for o primeiro bit, segue a cod. manchester diferencial
-          if( ( manc.equals( "01" ) && bruteBitFlux[ i-2 ] == 0 )  // se nao houve transicao
-          || ( manc.equals( "10" ) && bruteBitFlux[ i-2 ] == 1 ) )
-            bits += "1"; // o bit representado eh 1
+          if( ( manc[ 0 ] == 0 && manc[ 1 ] == 1 && bruteBitFlux[ i-2 ] == 0 )  // se nao houve transicao
+          || ( manc[ 0 ] == 1 && manc[ 1 ] == 0 && bruteBitFlux[ i-2 ] == 1 ) )
+            bits[ (i/2)%8 ] = 1; // o bit representado eh 1
           else // se houve transicao
-            bits += "0"; // o bit representado eh 0
+            bits[ (i/2)%8 ] = 0; // o bit representado eh 0
 
         }
 
         try {
-          appendNow( manc );
+          appendNow( manc[ 0 ] + "" + manc[ 1 ] );
           Thread.sleep( wait );
           wait = 100 / CommunicationLayer.jSlider.getValue();
         } catch (Exception e) { }
 
-        manc = ""; // reinicia a espera pela cod.
-
       }
 
       if( i % 16 == 15 ){ // a cada 16 iteracoes
-        frames[ pos ] = Integer.parseInt( bits , 2); // converte para inteiro e armazena
+        frames[ pos ] = Convert.binaryToUtf8( bits ); // converte para inteiro e armazena
         try {
           appendNow( " -> " + frames[ pos ] + "\n" );
           Thread.sleep( wait );
@@ -157,7 +153,6 @@ public class CamadaFisicaReceptora {
         } catch (Exception e) { }
         // se prepara para o proximo
         pos++;
-        bits = "";
 
       }
 

@@ -4,6 +4,7 @@ import javax.swing.SwingUtilities;
 
 import view.CommunicationLayer;
 import view.Sender;
+import view.Convert;
 
 public class CamadaFisicaTransmissora {
   private static int wait = 100 / CommunicationLayer.jSlider.getValue();
@@ -40,15 +41,12 @@ public class CamadaFisicaTransmissora {
 
     int pos = 0;
     for( int i = 0 ; i < frames.length ; i++ ){
-      String bits = Integer.toBinaryString( frames[ i ] );
-
-      for( int j = bits.length() ; j < 8 ; j++ ) // garante que todos os quadros tem 8 bits
-        bits = "0" + bits;
+      int[] bits = Convert.utf8ToBinary( frames[i] );
 
       appendNow( frames[ i ] + " -> " );
 
       for( int j = 0 ; j < 8 ; j++ ){ // transforma de string para 0/1
-        bitFlux[ pos ] = Character.getNumericValue( bits.charAt( j ) ); // armazena o valor, ao inves da referencia
+        bitFlux[ pos ] = bits[ j ]; // armazena o valor, ao inves da referencia
         
         try {
           appendNow( bitFlux[ pos ] + "" );
@@ -73,15 +71,12 @@ public class CamadaFisicaTransmissora {
 
     int pos = 0;
     for( int i = 0 ; i < frames.length ; i++ ){
-      String bits = Integer.toBinaryString( frames[ i ] );
-
-      for( int j = bits.length() ; j < 8 ; j++ ) // garante que todos os quadros tem 8 bits
-        bits = "0" + bits;
+      int[] bits = Convert.utf8ToBinary( frames[i] );
 
       appendNow( frames[ i ] + " -> " );
 
       for( int j = 0 ; j < 8 ; j++ ){ // transforma de string para 0/1 de acordo com a cod. manchester
-        int val = Character.getNumericValue( bits.charAt( j ) ); // pega o valor, ao inves da referencia
+        int val = bits[ j ]; // pega o valor, ao inves da referencia
   
         if( val == 0 ){ // se for 0, desce ( IEEE 802.3 standard )
           bitFlux[ pos ] = 1;
@@ -117,15 +112,12 @@ public class CamadaFisicaTransmissora {
 
     int pos = 0;
     for( int i = 0 ; i < frames.length ; i++ ){
-      String bits = Integer.toBinaryString( frames[ i ] );
-
-      for( int j = bits.length() ; j < 8 ; j++ ) // garante que todos os quadros tem 8 bits
-        bits = "0" + bits;
+      int[] bits = Convert.utf8ToBinary( frames[i] );
 
       appendNow( frames[ i ] + " -> " );
 
       for( int j = 0 ; j < 8 ; j++ ){ // transforma de string para 0/1 de acordo com a cod. manchester
-        int val = Character.getNumericValue( bits.charAt( j ) ); // pega o valor, ao inves da referencia
+        int val = bits[ j ]; // pega o valor, ao inves da referencia
   
         if( pos == 0 ){ // se for o primeiro bit, segue a cod. manchester padrao ( IEEE 802.3 standard )
           if( val == 0 ){ // se for 0, desce ( IEEE 802.3 standard )
