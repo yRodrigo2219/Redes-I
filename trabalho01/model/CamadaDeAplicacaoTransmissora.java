@@ -1,3 +1,12 @@
+/* ***************************************************************
+* Autor: Rodrigo Santos do Carmo
+* Matricula: 201810821
+* Inicio: 23/01/2020
+* Ultima alteracao: 02/02/2020
+* Nome: Simulacao da Camada Fisica
+* Funcao: Simula o funcionamento da camada fisica em uma rede
+*************************************************************** */
+
 package model;
 
 import javax.swing.SwingUtilities;
@@ -6,6 +15,13 @@ import view.MainWindow;
 import view.Sender;
 
 public class CamadaDeAplicacaoTransmissora {
+  /* ***************************************************************
+  * Metodo: camadaDeAplicacaoTransmissora
+  * Funcao: simulacao da camada de aplicacao transmissora, transforma a mensagem
+    em um array de ascii(256)
+  * Parametros: recebe a mensagem que deve ser convertida
+  * Retorno: void
+  *************************************************************** */
   public static void camadaDeAplicacaoTransmissora( String message ){
     Sender.senderLayerTxt.setText( "" ); // limpa o text
     char [] temp = message.toCharArray();
@@ -40,6 +56,12 @@ public class CamadaDeAplicacaoTransmissora {
 
   }
 
+  /* ***************************************************************
+  * Metodo: appendNow
+  * Funcao: concatena a mensagem desejada na proxima atualizacao do swing
+  * Parametros: recebe a string que deve ser concatenada
+  * Retorno: void
+  *************************************************************** */
   private static void appendNow( String str ){
     SwingUtilities.invokeLater( new Runnable(){
       public void run(){

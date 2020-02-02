@@ -1,14 +1,30 @@
+/* ***************************************************************
+* Autor: Rodrigo Santos do Carmo
+* Matricula: 201810821
+* Inicio: 23/01/2020
+* Ultima alteracao: 02/02/2020
+* Nome: Simulacao da Camada Fisica
+* Funcao: Simula o funcionamento da camada fisica em uma rede
+*************************************************************** */
+
 package model;
 
 import javax.swing.SwingUtilities;
 
 import view.CommunicationLayer;
-import view.Convert;
+import util.Convert;
 import view.Receiver;
 
 public class CamadaFisicaReceptora {
   private static int wait = 100 / CommunicationLayer.jSlider.getValue();
 
+  /* ***************************************************************
+  * Metodo: camadaFisicaReceptora
+  * Funcao: simulacao da camada fisica receptora, transforma o array de bits
+    em um array de ascii(256) de acordo com a codificacao
+  * Parametros: recebe os bits que devem ser convertidos
+  * Retorno: void
+  *************************************************************** */
   public static void camadaFisicaReceptora( int[] bruteBitFlux ){
     Receiver.receiverPhysTxt.setText( "" ); // limpa o texto
     int codType = CommunicationLayer.jDrop.getSelectedIndex();
@@ -36,6 +52,12 @@ public class CamadaFisicaReceptora {
 
   }
 
+  /* ***************************************************************
+  * Metodo: camadaFisicaReceptoraCodificacaoBinaria
+  * Funcao: realiza a interpretacao da codificacao binaria
+  * Parametros: recebe os bits que devem ser interpretados
+  * Retorno: retorna um array de ascii
+  *************************************************************** */
   private static int[] camadaFisicaReceptoraCodificacaoBinaria( int[] bruteBitFlux ){
     int[] frames = new int[ bruteBitFlux.length / 8 ]; // cada quadro contem 8 bits ( ascii )
 
@@ -51,7 +73,7 @@ public class CamadaFisicaReceptora {
       } catch (Exception e) { }
 
       if( i % 8 == 7 ){ // a cada 8 iteracoes
-        frames[ pos ] = Convert.binaryToUtf8( bits ); // converte para inteiro e armazena
+        frames[ pos ] = Convert.binaryToAscii( bits ); // converte para inteiro e armazena
         try {
           appendNow( " -> " + frames[ pos ] + "\n" );
           Thread.sleep( wait );
@@ -68,6 +90,12 @@ public class CamadaFisicaReceptora {
 
   }
 
+  /* ***************************************************************
+  * Metodo: camadaFisicaReceptoraCodificacaoManchester
+  * Funcao: realiza a interpretacao da codificacao manchester
+  * Parametros: recebe os bits que devem ser interpretados
+  * Retorno: retorna um array de ascii
+  *************************************************************** */
   private static int[] camadaFisicaReceptoraCodificacaoManchester( int[] bruteBitFlux ){
     int[] frames = new int[ bruteBitFlux.length / 16 ]; // cada quadro contem 8 bits ( ascii ) porem por se tratar da cod. 
                                                           // manchester, se utilizam 2 bits para representar um unico bit
@@ -93,8 +121,11 @@ public class CamadaFisicaReceptora {
       }
 
       if( i % 16 == 15 ){ // a cada 16 iteracoes
-        frames[ pos ] = Convert.binaryToUtf8( bits ); // converte para inteiro e armazena
+        frames[ pos ] = Convert.binaryToAscii( bits ); // converte para inteiro e armazena
         try {
+          appendNow( " -> " );
+          for( int j = 0 ; j < 8 ; j++ )
+            appendNow( bits[ j ] + "" );
           appendNow( " -> " + frames[ pos ] + "\n" );
           Thread.sleep( wait );
           wait = 100 / CommunicationLayer.jSlider.getValue();
@@ -110,6 +141,12 @@ public class CamadaFisicaReceptora {
 
   }
 
+  /* ***************************************************************
+  * Metodo: camadaFisicaReceptoraCodificacaoManchesterDiferencial
+  * Funcao: realiza a interpretacao da codificacao manchester diferencial
+  * Parametros: recebe os bits que devem ser interpretados
+  * Retorno: retorna um array de ascii
+  *************************************************************** */
   private static int[] camadaFisicaReceptoraCodificacaoManchesterDiferencial( int[] bruteBitFlux ){
     int[] frames = new int[ bruteBitFlux.length / 16 ]; // cada quadro contem 8 bits ( ascii ) porem por se tratar da cod. 
                                                           // manchester, se utilizam 2 bits para representar um unico bit
@@ -145,8 +182,11 @@ public class CamadaFisicaReceptora {
       }
 
       if( i % 16 == 15 ){ // a cada 16 iteracoes
-        frames[ pos ] = Convert.binaryToUtf8( bits ); // converte para inteiro e armazena
+        frames[ pos ] = Convert.binaryToAscii( bits ); // converte para inteiro e armazena
         try {
+          appendNow( " -> " );
+          for( int j = 0 ; j < 8 ; j++ )
+            appendNow( bits[ j ] + "" );
           appendNow( " -> " + frames[ pos ] + "\n" );
           Thread.sleep( wait );
           wait = 100 / CommunicationLayer.jSlider.getValue();
@@ -162,6 +202,12 @@ public class CamadaFisicaReceptora {
 
   }
 
+  /* ***************************************************************
+  * Metodo: appendNow
+  * Funcao: concatena a mensagem desejada na proxima atualizacao do swing
+  * Parametros: recebe a string que deve ser concatenada
+  * Retorno: void
+  *************************************************************** */
   private static void appendNow( String str ){
     SwingUtilities.invokeLater( new Runnable(){
       public void run(){

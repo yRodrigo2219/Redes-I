@@ -1,8 +1,24 @@
+/* ***************************************************************
+* Autor: Rodrigo Santos do Carmo
+* Matricula: 201810821
+* Inicio: 23/01/2020
+* Ultima alteracao: 02/02/2020
+* Nome: Simulacao da Camada Fisica
+* Funcao: Simula o funcionamento da camada fisica em uma rede
+*************************************************************** */
+
 package model;
 
 import view.Canvas;
 
 public class MeioDeComunicacao {
+  /* ***************************************************************
+  * Metodo: meioDeComunicacao
+  * Funcao: simulacao do meio de comunicacao, simula a passagem de bits
+    de uma fonte fisica a outra
+  * Parametros: recebe os bits que devem ser transmitidos
+  * Retorno: void
+  *************************************************************** */
   public static void meioDeComunicacao( int[] bruteBitFlux ){
     int[] bruteBitFluxSpotA = bruteBitFlux;
     
@@ -20,7 +36,7 @@ public class MeioDeComunicacao {
         }
 
         try {
-          Canvas.sync.acquire();
+          Canvas.sync.acquire(); // espera a animacao
 
         } catch ( Exception e ) { }
 

@@ -1,3 +1,12 @@
+/* ***************************************************************
+* Autor: Rodrigo Santos do Carmo
+* Matricula: 201810821
+* Inicio: 23/01/2020
+* Ultima alteracao: 02/02/2020
+* Nome: Simulacao da Camada Fisica
+* Funcao: Simula o funcionamento da camada fisica em uma rede
+*************************************************************** */
+
 package view;
 
 import javax.swing.JLabel;
@@ -11,7 +20,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
+import util.Constants;
 import java.awt.event.ActionEvent;
 import model.AplicacaoTransmissora;
 
@@ -20,6 +29,12 @@ public class Sender extends JPanel {
   public static JTextArea senderPhysTxt = new JTextArea();
   public static JTextArea senderTxt = new JTextArea();
 
+  /* ***************************************************************
+  * Metodo: Sender
+  * Funcao: construtor da classe
+  * Parametros: void
+  * Retorno: void
+  *************************************************************** */
   public Sender(){
     super();
     this.setPreferredSize( new Dimension( Constants.WIDTH/3 , Constants.HEIGHT ) );
@@ -35,6 +50,12 @@ public class Sender extends JPanel {
 
   }
 
+  /* ***************************************************************
+  * Metodo: initSenderApp
+  * Funcao: inicia o aplicativo que envia as mensagens na simulacao
+  * Parametros: void
+  * Retorno: void
+  *************************************************************** */
   private void initSenderApp(){
     Image img = new ImageIcon( "./img/greenChat.png" ).getImage().getScaledInstance( Constants.BLOONS_WIDTH , Constants.BLOONS_HEIGHT , java.awt.Image.SCALE_SMOOTH );
     JLabel sender = new JLabel( new ImageIcon( img ) );
@@ -72,6 +93,12 @@ public class Sender extends JPanel {
 
   }
 
+  /* ***************************************************************
+  * Metodo: initSenderAppLayer
+  * Funcao: inicia a camada de envio do aplicativo
+  * Parametros: void
+  * Retorno: void
+  *************************************************************** */
   private void initSenderAppLayer(){
     JScrollPane scrll = new JScrollPane( Sender.senderLayerTxt );
 
@@ -83,6 +110,12 @@ public class Sender extends JPanel {
 
   }
 
+  /* ***************************************************************
+  * Metodo: initSenderPhysicalLayer
+  * Funcao: inicia a camada fisica de envio
+  * Parametros: void
+  * Retorno: void
+  *************************************************************** */
   private void initSenderPhysicalLayer(){
     JScrollPane scrll = new JScrollPane( Sender.senderPhysTxt );
 
@@ -94,6 +127,12 @@ public class Sender extends JPanel {
 
   }
 
+  /* ***************************************************************
+  * Metodo: sendMsg
+  * Funcao: envia uma mensagem pela simulacao
+  * Parametros: recebe a mensagem que deve ser enviada
+  * Retorno: void
+  *************************************************************** */
   private void sendMsg( String msg ){
     AplicacaoTransmissora.aplicacaoTransmissora( msg );
 

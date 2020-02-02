@@ -1,8 +1,17 @@
+/* ***************************************************************
+* Autor: Rodrigo Santos do Carmo
+* Matricula: 201810821
+* Inicio: 23/01/2020
+* Ultima alteracao: 02/02/2020
+* Nome: Simulacao da Camada Fisica
+* Funcao: Simula o funcionamento da camada fisica em uma rede
+*************************************************************** */
+
 package view;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
+import util.Constants;
 import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame{
@@ -10,6 +19,12 @@ public class MainWindow extends JFrame{
   public static CommunicationLayer comm = new CommunicationLayer();
   public static Receiver rec = new Receiver();
 
+  /* ***************************************************************
+  * Metodo: MainWindow
+  * Funcao: construtor da classe
+  * Parametros: void
+  * Retorno: void
+  *************************************************************** */
   public MainWindow(){
     super();
     this.setTitle( Constants.NAME );
@@ -22,6 +37,12 @@ public class MainWindow extends JFrame{
 
   }
 
+  /* ***************************************************************
+  * Metodo: init
+  * Funcao: inicia alguns componentes necessarios
+  * Parametros: void
+  * Retorno: void
+  *************************************************************** */
   private void init(){
     this.add( sender );
     this.add( comm );
@@ -29,6 +50,12 @@ public class MainWindow extends JFrame{
 
   }
 
+  /* ***************************************************************
+  * Metodo: error
+  * Funcao: exibe uma mensagem de erro e re-estabelece a entrada de mensagens
+  * Parametros: mensagem que vai ser exibida quando ocorrer um erro
+  * Retorno: void
+  *************************************************************** */
   public static void error( String msg ){
     JOptionPane.showMessageDialog( null , "Error: " + msg , "Error" , JOptionPane.ERROR_MESSAGE );
 

@@ -1,3 +1,12 @@
+/* ***************************************************************
+* Autor: Rodrigo Santos do Carmo
+* Matricula: 201810821
+* Inicio: 23/01/2020
+* Ultima alteracao: 02/02/2020
+* Nome: Simulacao da Camada Fisica
+* Funcao: Simula o funcionamento da camada fisica em uma rede
+*************************************************************** */
+
 package view;
 
 import javax.imageio.ImageIO;
@@ -12,6 +21,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.Semaphore;
+import util.Constants;
 
 public class Canvas extends JPanel{
   public static Semaphore sync = new Semaphore( 0 );
@@ -23,6 +33,12 @@ public class Canvas extends JPanel{
   private BufferedImage down;
   private String lastBit = "";
 
+  /* ***************************************************************
+  * Metodo: Canvas
+  * Funcao: construtor da classe
+  * Parametros: void
+  * Retorno: void
+  *************************************************************** */
   public Canvas() {
     super();
     makeFluid();
@@ -31,21 +47,25 @@ public class Canvas extends JPanel{
       bits[i] = -1;
 
     try {
+      // Importa os sprites para animacao binaria
       binUp = ImageIO.read(new File("./img/binUp.png"));
       binDown = ImageIO.read(new File("./img/binDown.png"));
       binFromUp = ImageIO.read(new File("./img/binFromUp.png"));
       binFromDown = ImageIO.read(new File("./img/binFromDown.png"));
 
+      // Importa os sprites para animacao manchester
       asc = ImageIO.read(new File("./img/ascending.png"));
       ascFromUp = ImageIO.read(new File("./img/ascendingFromUp.png"));
       desc = ImageIO.read(new File("./img/descending.png"));
       descFromDown = ImageIO.read(new File("./img/descendingFromDown.png"));
 
+      // Importa os sprites para animacao manchester diferencial
       chgUp = ImageIO.read(new File("./img/changeUp.png"));
       chgDown = ImageIO.read(new File("./img/changeDown.png"));
       holdUp = ImageIO.read(new File("./img/holdUp.png"));
       holdDown = ImageIO.read(new File("./img/holdDown.png"));
 
+      // Importa o spirte de ausencia de onda da manchester e da manchester diferencial
       down = ImageIO.read(new File("./img/down.png"));
 
     } catch (Exception e) {
@@ -53,13 +73,19 @@ public class Canvas extends JPanel{
 
   }
 
+  /* ***************************************************************
+  * Metodo: makeFluid
+  * Funcao: cria um thread responsavel por atualizar o canvas de acordo com a velocidade
+  * Parametros: void
+  * Retorno: void
+  *************************************************************** */
   private void makeFluid() {
     new Thread(new Runnable() {
       public void run() {
         try {
           while (true) { // forca o swing a re-pintar a tela para atingir a velocidade de animacao
             // desejada
-            Thread.sleep(1000 / CommunicationLayer.jSlider.getValue());
+            Thread.sleep(2000 / CommunicationLayer.jSlider.getValue());
             repaint();
 
           }
@@ -72,6 +98,13 @@ public class Canvas extends JPanel{
 
   }
 
+  /* ***************************************************************
+  * Metodo: watcher
+  * Funcao: checka se ainda esta passando algum bit, caso nao 
+    esteja, libera o semaforo para continuacao do programa
+  * Parametros: void
+  * Retorno: void
+  *************************************************************** */
   public static void watcher() {
     new Thread(new Runnable() {
       public void run() {
@@ -80,7 +113,7 @@ public class Canvas extends JPanel{
 
             if (q.peek() == null && bits[0] == bits[1] && bits[1] == bits[2] && bits[2] == bits[3] && bits[3] == bits[4]
                 && bits[4] == -1) {
-              sync.release();
+              sync.release(); // continua a simulacao
               Thread.currentThread().interrupt();
             }
 
@@ -94,6 +127,12 @@ public class Canvas extends JPanel{
 
   }
 
+  /* ***************************************************************
+  * Metodo: paintComponent
+  * Funcao: pinta o JPanel
+  * Parametros: o grafico que deve ser utilizado para pintar
+  * Retorno: void
+  *************************************************************** */
   @Override
   public void paintComponent( Graphics g ){
     int codType = CommunicationLayer.jDrop.getSelectedIndex();
@@ -180,7 +219,7 @@ public class Canvas extends JPanel{
         }
 
         break;
-      case 2:
+      case 2:// animacao cod. manchester diferencial
         String manc = "";
         if( q.size() >= 2 && lastBit.equals( "" ) ){ // se tiver um bit real( representado por 2 bits na cod. manchester )
                                                     // e for o primeiro bit da transmissao
@@ -237,10 +276,10 @@ public class Canvas extends JPanel{
             g2.drawImage( desc , ( i * 68 ) , 50 , null );
           else if( bits[ i ] == -2 && ( bits[ i-1 ] == 0 || bits[ i-1 ] == -3 ) )
             g2.drawImage( descFromDown , ( i * 68 ) , 50 , null );
-          else if( bits[ i ] == 2 && ( bits[ i-1 ] == 1 || bits[ i-1 ] == 3 ) ) // impossiveis na pratica,  
-            g2.drawImage( asc , ( i * 68 ) , 50 , null );                       // ja que ascii tem 7 bits e
-          else if( bits[ i ] == 2 && ( bits[ i-1 ] == 0 || bits[ i-1 ] == -3 ) )// esta sendo armazenado
-            g2.drawImage( ascFromUp , ( i * 68 ) , 50 , null );                 // como 8 bits
+          else if( bits[ i ] == 2 && ( bits[ i-1 ] == 1 || bits[ i-1 ] == 3 ) )  
+            g2.drawImage( asc , ( i * 68 ) , 50 , null );
+          else if( bits[ i ] == 2 && ( bits[ i-1 ] == 0 || bits[ i-1 ] == -3 ) )
+            g2.drawImage( ascFromUp , ( i * 68 ) , 50 , null );
           else if( bits[ i ] == 1 )
             g2.drawImage( holdDown, ( i * 68 ) , 50 , null );
           else if( bits[ i ] == 3 )
